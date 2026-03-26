@@ -5,7 +5,6 @@ const upload = require("../config/upload");
 
 const router = express.Router();
 
-// ─── POST /api/posts — Create a post (text, image, or both) ────────────────
 router.post("/", auth, upload.single("image"), async (req, res) => {
   try {
     const { text } = req.body;
@@ -23,17 +22,14 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
       imageUrl,
     });
 
-    // Populate author username before returning
     await post.populate("author", "username");
 
     return res.status(201).json(post);
   } catch (err) {
-    console.error("Create post error:", err);
     return res.status(500).json({ message: "Server error." });
   }
 });
 
-// ─── GET /api/posts — Get all posts (public feed), newest first ─────────────
 router.get("/", async (req, res) => {
   try {
     const posts = await Post.find()
@@ -42,12 +38,10 @@ router.get("/", async (req, res) => {
 
     return res.json(posts);
   } catch (err) {
-    console.error("Get posts error:", err);
     return res.status(500).json({ message: "Server error." });
   }
 });
 
-// ─── POST /api/posts/:id/like — Toggle like ────────────────────────────────
 router.post("/:id/like", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -59,9 +53,9 @@ router.post("/:id/like", auth, async (req, res) => {
     const index = post.likes.indexOf(userId);
 
     if (index === -1) {
-      post.likes.push(userId); // like
+      post.likes.push(userId);
     } else {
-      post.likes.splice(index, 1); // unlike
+      post.likes.splice(index, 1);
     }
 
     await post.save();
@@ -69,12 +63,10 @@ router.post("/:id/like", auth, async (req, res) => {
 
     return res.json(post);
   } catch (err) {
-    console.error("Like post error:", err);
     return res.status(500).json({ message: "Server error." });
   }
 });
 
-// ─── POST /api/posts/:id/comment — Add comment ─────────────────────────────
 router.post("/:id/comment", auth, async (req, res) => {
   try {
     const { text } = req.body;
@@ -99,7 +91,6 @@ router.post("/:id/comment", auth, async (req, res) => {
 
     return res.json(post);
   } catch (err) {
-    console.error("Comment error:", err);
     return res.status(500).json({ message: "Server error." });
   }
 });

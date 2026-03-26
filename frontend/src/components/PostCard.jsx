@@ -12,7 +12,6 @@ export default function PostCard({ post, onPostUpdated }) {
   const isLiked = post.likes?.includes(currentUserId);
 
   const handleLike = async () => {
-    // Optimistic toggle
     const updatedLikes = isLiked
       ? post.likes.filter((id) => id !== currentUserId)
       : [...post.likes, currentUserId];
@@ -23,9 +22,7 @@ export default function PostCard({ post, onPostUpdated }) {
       const { data } = await api.post(`/api/posts/${post._id}/like`);
       onPostUpdated(data);
     } catch (err) {
-      // Revert on error
       onPostUpdated(post);
-      console.error("Like failed:", err);
     }
   };
 
@@ -40,7 +37,6 @@ export default function PostCard({ post, onPostUpdated }) {
 
   return (
     <Card className="mb-3 border-0 shadow-sm">
-      {/* Header */}
       <Card.Body className="pb-2">
         <div className="d-flex align-items-center mb-2">
           <div
@@ -62,7 +58,6 @@ export default function PostCard({ post, onPostUpdated }) {
         {post.text && <p className="mb-0" style={{ fontSize: 15 }}>{post.text}</p>}
       </Card.Body>
 
-      {/* Image */}
       {imageUrl && (
         <Card.Img
           src={imageUrl}
@@ -71,7 +66,6 @@ export default function PostCard({ post, onPostUpdated }) {
         />
       )}
 
-      {/* Actions */}
       <Card.Body className="pt-2 pb-2">
         <div className="d-flex gap-3">
           <Button
@@ -93,7 +87,6 @@ export default function PostCard({ post, onPostUpdated }) {
           </Button>
         </div>
 
-        {/* Comments */}
         <Collapse in={showComments}>
           <div>
             <CommentSection

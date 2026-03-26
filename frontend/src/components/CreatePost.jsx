@@ -41,7 +41,6 @@ export default function CreatePost({ onPostCreated }) {
       setText("");
       removeImage();
     } catch (err) {
-      console.error("Failed to create post:", err);
     } finally {
       setSubmitting(false);
     }

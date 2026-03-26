@@ -15,7 +15,6 @@ export default function Feed() {
       const { data } = await api.get("/api/posts");
       setPosts(data);
     } catch (err) {
-      console.error("Failed to fetch posts:", err);
     } finally {
       setLoading(false);
     }
@@ -25,19 +24,16 @@ export default function Feed() {
     fetchPosts();
   }, [fetchPosts]);
 
-  /* Prepend new post without reload */
   const handlePostCreated = (newPost) => {
     setPosts((prev) => [newPost, ...prev]);
   };
 
-  /* Update a post in-place (like / comment) */
   const handlePostUpdated = (updatedPost) => {
     setPosts((prev) =>
       prev.map((p) => (p._id === updatedPost._id ? updatedPost : p))
     );
   };
 
-  /* Sorted / filtered view */
   const visiblePosts = (() => {
     switch (tab) {
       case "liked":
@@ -49,7 +45,7 @@ export default function Feed() {
           (a, b) => (b.comments?.length || 0) - (a.comments?.length || 0)
         );
       default:
-        return posts; // already newest-first from API
+        return posts;
     }
   })();
 
@@ -60,7 +56,6 @@ export default function Feed() {
       <Container style={{ maxWidth: 600 }}>
         <CreatePost onPostCreated={handlePostCreated} />
 
-        {/* Filter tabs */}
         <Nav
           variant="tabs"
           activeKey={tab}

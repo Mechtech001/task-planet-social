@@ -19,7 +19,6 @@ export default function CommentSection({ postId, comments, onCommentAdded }) {
       onCommentAdded(data);
       setText("");
     } catch (err) {
-      console.error("Failed to add comment:", err);
     } finally {
       setSubmitting(false);
     }
